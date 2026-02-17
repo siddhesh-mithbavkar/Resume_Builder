@@ -6,7 +6,10 @@ function FormSection({
     addSkill,
     educationInput,
     handleEducationChange,
-    addEducation
+    addEducation,
+    experienceInput,
+    handleExperienceChange,
+    addExperience
 }) {
     return (
         <div className="col-md-6 p-4 border-end">
@@ -89,6 +92,46 @@ function FormSection({
 
                 <button className="btn btn-success" onClick={addEducation}>
                     Add Education
+                </button>
+
+                <hr />
+                <h4 className="mt-4">Experience</h4>
+
+                <div className="mb-3">
+                    <label className="form-label">Company</label>
+                    <input
+                        type="text"
+                        name="company"
+                        className="form-control"
+                        value={experienceInput.company}
+                        onChange={handleExperienceChange}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Role</label>
+                    <input
+                        type="text"
+                        name="role"
+                        className="form-control"
+                        value={experienceInput.role}
+                        onChange={handleExperienceChange}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Duration</label>
+                    <input
+                        type="text"
+                        name="duration"
+                        className="form-control"
+                        value={experienceInput.duration}
+                        onChange={handleExperienceChange}
+                    />
+                </div>
+
+                <button className="btn btn-success" onClick={addExperience}>
+                    Add Experience
                 </button>
 
             </div>

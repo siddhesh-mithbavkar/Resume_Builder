@@ -12,7 +12,8 @@ function App() {
       phone: ""
     },
     skills: [],
-    education: []
+    education: [],
+    experience: []
   });
 
 
@@ -92,6 +93,50 @@ function App() {
     });
   };
 
+  const [experienceInput, setExperienceInput] = useState({
+    company: "",
+    role: "",
+    duration: ""
+  });
+
+  const handleExperienceChange = (e) => {
+    const { name, value } = e.target;
+
+    setExperienceInput({
+      ...experienceInput,
+      [name]: value
+    });
+  };
+
+  const addExperience = () => {
+    if (
+      !experienceInput.company ||
+      !experienceInput.role ||
+      !experienceInput.duration
+    ) return;
+
+    setResumeData({
+      ...resumeData,
+      experience: [...resumeData.experience, experienceInput]
+    });
+
+    setExperienceInput({
+      company: "",
+      role: "",
+      duration: ""
+    });
+  };
+
+  const removeExperience = (indexToRemove) => {
+    const updatedExperience = resumeData.experience.filter(
+      (_, index) => index !== indexToRemove
+    );
+
+    setResumeData({
+      ...resumeData,
+      experience: updatedExperience
+    });
+  };
 
 
   return (
@@ -109,6 +154,9 @@ function App() {
           educationInput={educationInput}
           handleEducationChange={handleEducationChange}
           addEducation={addEducation}
+          experienceInput={experienceInput}
+          handleExperienceChange={handleExperienceChange}
+          addExperience={addExperience}
         />
 
 
@@ -118,6 +166,7 @@ function App() {
           resumeData={resumeData}
           removeSkill={removeSkill}
           removeEducation={removeEducation}
+          removeExperience={removeExperience}  
         />
 
 
