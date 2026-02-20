@@ -31,34 +31,36 @@ function PreviewSection({
     return (
         <div className="col-md-6 p-4 bg-secondary bg-opacity-10 d-flex flex-column align-items-center">
 
-            <div ref={resumeRef} className="bg-white shadow p-4"
+            <div ref={resumeRef} className="bg-white shadow"
                 style={{
                     width: "794px",
-                    minHeight: "1123px"
+                    minHeight: "1123px",
+                    padding: "40px",
+                    fontFamily: "Arial",
+                    fontSize: "14px",
+                    lineHeight: "1.5"
                 }}>
 
                 <div className="preview-section">
-                    <h2 className="mb-4">Resume Preview</h2>
+                    {/* <h2 className="mb-4">Resume Preview</h2> */}
 
-                    <h3>{resumeData.personalInfo.name}</h3>
-                    <p>{resumeData.personalInfo.email}</p>
-                    <p>{resumeData.personalInfo.phone}</p>
+                    <div className="text-center mb-4">
+                        <h2 className="fw-bold mb-1">
+                            {resumeData.personalInfo.name}
+                        </h2>
+
+                        <p className="mb-0">
+                            {resumeData.personalInfo.email} | {resumeData.personalInfo.phone}
+                        </p>
+                    </div>
+
                     <hr />
                     <h4>Skills</h4>
 
-                    <ul className="list-group">
+                    <ul style={{ paddingLeft: "18px" }}>
                         {resumeData.skills.map((skill, index) => (
-                            <li
-                                key={index}
-                                className="list-group-item d-flex justify-content-between align-items-center"
-                            >
+                            <li key={index} style={{ marginBottom: "4px" }}>
                                 {skill}
-                                <button
-                                    className="btn btn-sm btn-danger"
-                                    onClick={() => removeSkill(index)}
-                                >
-                                    X
-                                </button>
                             </li>
                         ))}
                     </ul>
@@ -67,21 +69,9 @@ function PreviewSection({
                     <h4>Education</h4>
 
                     {resumeData.education.map((edu, index) => (
-                        <div
-                            key={index}
-                            className="mb-2 p-2 border rounded d-flex justify-content-between align-items-center"
-                        >
-                            <div>
-                                <strong>{edu.degree}</strong>
-                                <div>{edu.college}</div>
-                            </div>
-
-                            <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => removeEducation(index)}
-                            >
-                                X
-                            </button>
+                        <div key={index} className="mb-2">
+                            <strong>{edu.degree}</strong>
+                            <div>{edu.college}</div>
                         </div>
                     ))}
 

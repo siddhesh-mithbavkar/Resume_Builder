@@ -138,6 +138,33 @@ function App() {
     });
   };
 
+  const handleSkillDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(resumeData.skills);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setResumeData({
+      ...resumeData,
+      skills: items
+    });
+  };
+
+  const handleEducationDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(resumeData.education);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setResumeData({
+      ...resumeData,
+      education: items
+    });
+  };
+
+
 
   return (
     <div className="container-fluid vh-100">
@@ -157,6 +184,10 @@ function App() {
           experienceInput={experienceInput}
           handleExperienceChange={handleExperienceChange}
           addExperience={addExperience}
+          removeSkill={removeSkill}
+          handleSkillDragEnd={handleSkillDragEnd}
+          removeEducation={removeEducation}          
+          handleEducationDragEnd={handleEducationDragEnd}
         />
 
 
@@ -166,7 +197,7 @@ function App() {
           resumeData={resumeData}
           removeSkill={removeSkill}
           removeEducation={removeEducation}
-          removeExperience={removeExperience}  
+          removeExperience={removeExperience}
         />
 
 
