@@ -164,7 +164,18 @@ function App() {
     });
   };
 
+  const handleExperienceDragEnd = (result) => {
+    if (!result.destination) return;
 
+    const items = Array.from(resumeData.experience);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setResumeData({
+      ...resumeData,
+      experience: items
+    });
+  };
 
   return (
     <div className="container-fluid vh-100">
@@ -186,8 +197,10 @@ function App() {
           addExperience={addExperience}
           removeSkill={removeSkill}
           handleSkillDragEnd={handleSkillDragEnd}
-          removeEducation={removeEducation}          
+          removeEducation={removeEducation}
           handleEducationDragEnd={handleEducationDragEnd}
+          removeExperience={removeExperience}              
+          handleExperienceDragEnd={handleExperienceDragEnd}
         />
 
 

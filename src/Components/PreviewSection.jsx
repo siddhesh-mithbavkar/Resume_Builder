@@ -2,113 +2,144 @@ import React, { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
+function PreviewSection({ resumeData }) {
+  const resumeRef = useRef();
 
-function PreviewSection({
-    resumeData,
-    removeSkill,
-    removeEducation,
-    removeExperience
-}) {
+  const downloadPDF = async () => {
+    const element = resumeRef.current;
 
-    const resumeRef = useRef();
+    const canvas = await html2canvas(element, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
 
-    const downloadPDF = async () => {
-        const element = resumeRef.current;
+    const pdf = new jsPDF("p", "mm", "a4");
 
-        const canvas = await html2canvas(element);
-        const imgData = canvas.toDataURL("image/png");
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        const pdf = new jsPDF("p", "mm", "a4");
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    pdf.save("resume.pdf");
+  };
 
-        const imgWidth = 210;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  return (
+    <div className="col-md-6 p-4 bg-secondary bg-opacity-10 d-flex flex-column align-items-center">
 
-        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-        pdf.save("resume.pdf");
-    };
+      <div
+        ref={resumeRef}
+        className="bg-white shadow"
+        style={{
+          width: "794px",
+          minHeight: "1123px",
+          padding: "50px 60px",
+          fontFamily: "Calibri, Arial, sans-serif",
+          fontSize: "14px",
+          lineHeight: "1.6",
+          color: "#333"
+        }}
+      >
 
+        {/* HEADER */}
+        <div className="text-center mb-5">
+          <h1
+            style={{
+              fontSize: "28px",
+              fontWeight: "700",
+              letterSpacing: "1px",
+              marginBottom: "5px"
+            }}
+          >
+            {resumeData.personalInfo.name}
+          </h1>
 
-    return (
-        <div className="col-md-6 p-4 bg-secondary bg-opacity-10 d-flex flex-column align-items-center">
+          <div style={{ fontSize: "14px", color: "#555" }}>
+            {resumeData.personalInfo.email} | {resumeData.personalInfo.phone}
+          </div>
+        </div>
 
-            <div ref={resumeRef} className="bg-white shadow"
-                style={{
-                    width: "794px",
-                    minHeight: "1123px",
-                    padding: "40px",
-                    fontFamily: "Arial",
-                    fontSize: "14px",
-                    lineHeight: "1.5"
-                }}>
+        {/* SKILLS */}
+        <SectionTitle title="SKILLS" />
 
-                <div className="preview-section">
-                    {/* <h2 className="mb-4">Resume Preview</h2> */}
+        <ul style={{ paddingLeft: "18px", marginTop: "5px" }}>
+          {resumeData.skills.map((skill, index) => (
+            <li key={index} style={{ marginBottom: "4px", fontSize: "13px" }}>
+              {skill}
+            </li>
+          ))}
+        </ul>
 
-                    <div className="text-center mb-4">
-                        <h2 className="fw-bold mb-1">
-                            {resumeData.personalInfo.name}
-                        </h2>
+        {/* EDUCATION */}
+        <SectionTitle title="EDUCATION" />
 
-                        <p className="mb-0">
-                            {resumeData.personalInfo.email} | {resumeData.personalInfo.phone}
-                        </p>
-                    </div>
+        {resumeData.education.map((edu, index) => (
+          <div key={index} style={{ marginBottom: "10px" }}>
+            <div style={{ fontWeight: "600" }}>
+              {edu.degree}
+            </div>
+            <div style={{ fontSize: "13px", color: "#555" }}>
+              {edu.college}
+            </div>
+          </div>
+        ))}
 
-                    <hr />
-                    <h4>Skills</h4>
+        {/* EXPERIENCE */}
+        <SectionTitle title="EXPERIENCE" />
 
-                    <ul style={{ paddingLeft: "18px" }}>
-                        {resumeData.skills.map((skill, index) => (
-                            <li key={index} style={{ marginBottom: "4px" }}>
-                                {skill}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <hr />
-                    <h4>Education</h4>
-
-                    {resumeData.education.map((edu, index) => (
-                        <div key={index} className="mb-2">
-                            <strong>{edu.degree}</strong>
-                            <div>{edu.college}</div>
-                        </div>
-                    ))}
-
-                    <hr />
-                    <h4>Experience</h4>
-
-                    {resumeData.experience.map((exp, index) => (
-                        <div
-                            key={index}
-                            className="mb-3 p-2 border rounded d-flex justify-content-between align-items-start"
-                        >
-                            <div>
-                                <strong>{exp.role}</strong>
-                                <div>{exp.company}</div>
-                                <small className="text-muted">{exp.duration}</small>
-                            </div>
-
-                            <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => removeExperience(index)}
-                            >
-                                X
-                            </button>
-                        </div>
-                    ))}
-
-
-                </div>
-
+        {resumeData.experience.map((exp, index) => (
+          <div key={index} style={{ marginBottom: "14px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontWeight: "600"
+              }}
+            >
+              <span>{exp.role}</span>
+              <span style={{ fontWeight: "400", color: "#555" }}>
+                {exp.duration}
+              </span>
             </div>
 
-            <button className="btn btn-primary mt-3" onClick={downloadPDF}>
-                Download PDF
-            </button>
+            <div
+              style={{
+                fontStyle: "italic",
+                fontSize: "13px",
+                marginTop: "3px",
+                color: "#444"
+              }}
+            >
+              {exp.company}
+            </div>
+          </div>
+        ))}
 
-        </div>
-    );
+      </div>
+
+      <button className="btn btn-primary mt-3" onClick={downloadPDF}>
+        Download PDF
+      </button>
+
+    </div>
+  );
+}
+
+/* Reusable Section Title Component */
+function SectionTitle({ title }) {
+  return (
+    <h6
+      style={{
+        fontSize: "13px",
+        fontWeight: "700",
+        textTransform: "uppercase",
+        letterSpacing: "1px",
+        marginTop: "25px",
+        marginBottom: "8px",
+        color: "#222",
+        borderBottom: "1px solid #ccc",
+        paddingBottom: "6px"
+      }}
+    >
+      {title}
+    </h6>
+  );
 }
 
 export default PreviewSection;

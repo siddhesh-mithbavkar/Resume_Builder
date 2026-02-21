@@ -15,8 +15,10 @@ function FormSection({
     handleExperienceChange,
     addExperience,
     handleSkillDragEnd,
-    removeEducation,            // ✅
-    handleEducationDragEnd
+    removeEducation,
+    handleEducationDragEnd,
+    removeExperience,
+    handleExperienceDragEnd
 }) {
     return (
         <div className="col-md-6 p-4 border-end">
@@ -227,7 +229,54 @@ function FormSection({
                         value={experienceInput.duration}
                         onChange={handleExperienceChange}
                     />
+
+                    <DragDropContext onDragEnd={handleExperienceDragEnd}>
+                        <Droppable droppableId="experience">
+                            {(provided) => (
+                                <ul
+                                    className="list-group mt-3"
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                    {resumeData.experience.map((exp, index) => (
+                                        <Draggable
+                                            key={exp.company + index}
+                                            draggableId={exp.company + index}
+                                            index={index}
+                                        >
+                                            {(provided) => (
+                                                <li
+                                                    className="list-group-item d-flex justify-content-between align-items-center"
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
+                                                    <div>
+                                                        <strong>{exp.role}</strong>
+                                                        <div className="small">{exp.company}</div>
+                                                        <div className="small text-muted">
+                                                            {exp.duration}
+                                                        </div>
+                                                    </div>
+
+                                                    <button
+                                                        className="btn btn-sm btn-danger"
+                                                        onClick={() => removeExperience(index)}
+                                                    >
+                                                        X
+                                                    </button>
+                                                </li>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </ul>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                 </div>
+
+
 
                 <button className="btn btn-success" onClick={addExperience}>
                     Add Experience
